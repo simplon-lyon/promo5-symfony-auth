@@ -1,0 +1,27 @@
+security:
+    # https://symfony.com/doc/current/security.html#c-encoding-the-user-s-password
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        db_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            provider: db_provider
+            anonymous: true
+            # https://symfony.com/doc/current/security/json_login_setup.html
+            json_login:
+                check_path: login
+                username_path: email
+                password_path: password
+            # https://symfony.com/doc/current/security.html#logging-out
+            logout:
+                path: logout
